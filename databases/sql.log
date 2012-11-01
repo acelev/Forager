@@ -53,3 +53,61 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
+timestamp: 2012-10-31T21:23:48.235890
+CREATE TABLE trade(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_to INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    user_from INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    location INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    approved CHAR(1),
+    date TIMESTAMP
+);
+success!
+timestamp: 2012-10-31T21:23:48.253154
+CREATE TABLE location(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    cord CHAR(512),
+    date TIMESTAMP,
+    title CHAR(512),
+    note TEXT,
+    rating INTEGER,
+    photo INTEGER REFERENCES photo (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2012-10-31T21:24:34.533963
+CREATE TABLE rating(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    rating INTEGER,
+    location INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    date TIMESTAMP
+);
+success!
+timestamp: 2012-10-31T21:24:34.537879
+CREATE TABLE message(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_to INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    user_from INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    subject CHAR(512),
+    date TIMESTAMP,
+    note TEXT
+);
+success!
+timestamp: 2012-10-31T21:25:08.126172
+CREATE TABLE comment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    location INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    date TIMESTAMP,
+    note TEXT,
+    user INTEGER REFERENCES auth_user (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2012-10-31T21:25:08.139888
+CREATE TABLE photo(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    location INTEGER REFERENCES location (id) ON DELETE CASCADE,
+    image CHAR(512),
+    private CHAR(1)
+);
+success!
