@@ -1,2 +1,12 @@
 [2012-10-31 19:43:17] START
 [2012-10-31 21:00:23] EDIT Forager/models/database.py: 0
+[2012-10-31 21:07:47] DELETE Forager/models/database.py: -41
+[2012-10-31 21:07:57] CREATE Forager.py: 0
+[2012-10-31 21:08:03] EDIT Forager/models/Forager.py: 41
+[2012-10-31 21:11:39] DELETE Forager/models/Forager.py: -41
+[2012-10-31 21:11:49] CREATE _database.py: 0
+[2012-10-31 21:11:54] EDIT Forager/models/_database.py: 41
+[2012-10-31 21:12:10] DELETE Forager/models/_database.py: -41
+[2012-10-31 21:12:17] CREATE zdatabase.py: 0
+[2012-10-31 21:12:22] EDIT Forager/models/zdatabase.py: 41
+[2012-10-31 21:12:53] EDIT Forager/models/zdatabase.py: 0
