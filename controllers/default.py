@@ -9,7 +9,7 @@
 ## - call exposes all registered services (none by default)
 #########################################################################
 
-
+@auth.requires_login()
 def index():
     """
     example action using the internationalization operator T and flash
@@ -17,10 +17,15 @@ def index():
 
     if you need a simple wiki simple replace the two lines below with:
     return auth.wiki()
-    """
-    response.flash = T("Welcome to web2py!")
-    return dict(message=T('Hello World'))
+    """  
+    response.flash = T("Welcome to Forager")
+    return dict(message=T("Welcome!"))
 
+@auth.requires_login()
+def createprofile():
+   
+   form = SQLFORM(db.user)
+   return dict(form=form)  
 
 def user():
     """
