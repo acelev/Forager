@@ -5,8 +5,9 @@ db.define_table ('user',
                Field('user', 'reference auth_user', default = auth.user,
                                                    readable=False,
                                                    writable=False),
-               Field('image', 'upload'),
+               Field('user_name', 'string', requires = IS_NOT_EMPTY()),
                Field('bio', 'text'),
+               Field('image', 'upload'),
                Field('rating', 'integer', default=1,
                                           readable = False,
                                           writable = False),
@@ -25,7 +26,7 @@ db.define_table('trade',
                 Field('location_to', 'reference location'
           #,requires= IS_IN(db().select(db.location.user.user == auth.user
                 ),
-                Field('location_from', 'reference location')
+                Field('location_from', 'reference location'),
                 Field('approved', 'boolean'),
                 Field('date', 'datetime',default=datetime.utcnow()),
                 )

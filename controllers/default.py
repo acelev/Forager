@@ -11,20 +11,20 @@
 
 @auth.requires_login()
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simple replace the two lines below with:
-    return auth.wiki()
-    """  
-    response.flash = T("Welcome to Forager")
-    return dict(message=T("Welcome!"))
+    user = db.user(auth.user_id)
+    return dict(user=user)
 
 @auth.requires_login()
 def createprofile():
    
    form = SQLFORM(db.user)
+   if form.process().accepted:
+       response.flash = 'profile saved'
+       redirect(URL('index'))
+   elif form.errors:
+       response.flash = 'profile has errors'
+   else:
+       response.flash = 'Please take a minute to fill out your profile'
    return dict(form=form)  
 
 def user():
