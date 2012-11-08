@@ -6,3 +6,4 @@ errors/*
 sessions/*
 *.pyc
 *.bak
+*.swp
