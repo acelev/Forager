@@ -11,12 +11,11 @@
 
 @auth.requires_login()
 def index():
-    user = db.user(auth.user_id)
+    user = db(db.user.user == auth.user).select()
     return dict(user=user)
 
 @auth.requires_login()
-def createprofile():
-   
+def createprofile(): 
    form = SQLFORM(db.user)
    if form.process().accepted:
        response.flash = 'profile saved'
