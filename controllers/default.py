@@ -11,7 +11,7 @@
 
 @auth.requires_login()
 def index():
-    user = db(db.user.user == auth.user).select()
+    user = db(db.user.user_id == auth.user_id).select().first()
     return dict(user=user)
 
 @auth.requires_login()

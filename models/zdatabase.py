@@ -2,6 +2,9 @@
 from datetime import datetime
 
 db.define_table ('user',
+              Field('user_id', 'integer', default= auth.user_id,
+                                                    readable=False,
+                                                    writable=False),
                Field('user', 'reference auth_user', default = auth.user,
                                                    readable=False,
                                                    writable=False),
