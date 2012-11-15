@@ -1,5 +1,6 @@
 {{extend 'layout.html'}}
-<h2>{{=user.user_name}}</h2><br>
-<img src="../uploads/{{=user.image}}" alt="{{=user.user_name}}" ><br>
+<h2>{{=auth.user.user_name}}</h2><br> 
+<h3>Rating:</h3> {{=auth.user.rating}}<br>
 <h3>Bio:</h3><br>
-{{=user.bio}}<br>
+{{=auth.user.bio}}<br>
+ <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>

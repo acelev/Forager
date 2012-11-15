@@ -11,7 +11,7 @@
 
 @auth.requires_login()
 def index():
-    user = db(db.user.user_id == auth.user_id).select().first()
+    user = auth.user
     return dict(user=user)
 
 @auth.requires_login()
@@ -24,7 +24,20 @@ def createprofile():
        response.flash = 'profile has errors'
    else:
        response.flash = 'Please take a minute to fill out your profile'
-   return dict(form=form)  
+   return dict(form=form) 
+
+
+def ajaxlivesearch():
+    partialstr = request.vars.values()[0]
+    query = db.location.title.like('%'+partialstr+'%')
+    countries = db(query).select(db.location.title)
+    items = []
+    for (i,location) in enumerate(locations):
+        items.append(DIV(A(location.title, _id="res%s"%i, 
+          _href="#", _onclick="copyToBox($('#res%s').html())"%i), 
+          _id="resultLiveSearch"))
+
+    return TAG[''](*items) 
 
 def user():
     """

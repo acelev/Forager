@@ -1,28 +1,11 @@
 # coding: utf8
 from datetime import datetime
 
-db.define_table ('user',
-              Field('user_id', 'integer', default= auth.user_id,
-                                                    readable=False,
-                                                    writable=False),
-               Field('user', 'reference auth_user', default = auth.user,
-                                                   readable=False,
-                                                   writable=False),
-               Field('user_name', 'string', default = "user name"),
-               Field('bio', 'text', default = ""),
-               Field('image', 'upload'),
-               Field('rating', 'integer', default=1,
-                                          readable = False,
-                                          writable = False),
-               Field('date', 'datetime', default=datetime.utcnow(),
-                                          readable = False,
-                                          writable = False),
-               )
 
 db.define_table('trade',
-                Field('user_to', 'reference user', readable = False,
+                Field('user_to', 'reference auth_user', readable = False,
                                                    writable = False),
-                Field('user_from', 'reference user', default =
+                Field('user_from', 'reference auth_user', default =
                                                      auth.user,
                                                     readable = False,
                                                     writable = False),
@@ -35,7 +18,7 @@ db.define_table('trade',
                 )
 
 db.define_table('location',
-                Field('user', 'reference user', default=auth.user,
+                Field('user', 'reference auth_user', default=auth.user,
                                           readable = False,
                                           writable = False),
                 Field('cord', 'string', default="cordinates"),
@@ -50,15 +33,15 @@ db.define_table('location',
                 )
 
 db.define_table('location_rating',
-                Field('user', 'reference user'),
+                Field('user', 'reference auth_user'),
                 Field('rating', 'integer', default=1),
                 Field('location', 'reference location'),
                 Field('date', 'datetime',default=datetime.utcnow()),
                 )
 
 db.define_table('message',
-                Field('user_to', 'reference user'),
-                Field('user_from', 'reference user'),
+                Field('user_to', 'reference auth_user'),
+                Field('user_from', 'reference auth_user'),
                 Field('subject', 'string', default=""),
                 Field('date', 'datetime', default=datetime.utcnow()),
                 Field('note', 'text'),
@@ -68,7 +51,7 @@ db.define_table('comment',
                 Field('location', 'reference location'),
                 Field('date', 'datetime', default=datetime.utcnow()),
                 Field('note', 'text'),
-                Field('user', 'reference user'),
+                Field('user', 'reference auth_user'),
                 )
 
 db.define_table('photo',

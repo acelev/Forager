@@ -13,6 +13,36 @@ Description: A two-column, fixed-width and lightweight template ideal for 1024x7
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
  <head>
+
+
+<script type="text/javascript">
+(function() {
+    if (typeof window.janrain !== 'object') window.janrain = {};
+    if (typeof window.janrain.settings !== 'object') window.janrain.settings = {};
+    
+    janrain.settings.tokenUrl = 'http://127.0.0.1:8000/Forager/default/index';
+
+    function isReady() { janrain.ready = true; };
+    if (document.addEventListener) {
+      document.addEventListener("DOMContentLoaded", isReady, false);
+    } else {
+      window.attachEvent('onload', isReady);
+    }
+
+    var e = document.createElement('script');
+    e.type = 'text/javascript';
+    e.id = 'janrainAuthWidget';
+
+    if (document.location.protocol === 'https:') {
+      e.src = 'https://rpxnow.com/js/lib/forager/engage.js';
+    } else {
+      e.src = 'http://widget-cdn.rpxnow.com/js/lib/forager/engage.js';
+    }
+
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(e, s);
+})();
+</script>
   <title>
    {{=response.title or request.application}}
   </title>
@@ -27,6 +57,38 @@ div.flash { position: fixed; float: right; padding: 10px; top: 10px; right: 30px
 div.error { background-color: red; color: white; padding: 3px; }
 .auth_navbar { text-align:right; z-index:20; position: absolute; top: 2px; right:30px; border:0; padding:0 }
   </style>
+
+<!-- Search bar code -->
+</style>
+    <script type="text/javascript" src="{{=URL(r=request,c='static',f='jquery.js')}}"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function(){
+        hide();
+    });
+
+    function getData(value){
+        if(value != ""){
+            $("#ajaxresults").show();
+            $.post("{{=URL(r=request,f='ajaxlivesearch')}}",{partialstr:value},function(result){
+                $("#ajaxresults").html(result);
+            });
+        }else{
+            hide();
+        }
+    }
+
+    function hide(){
+        $("#ajaxresults").hide();
+    }
+
+    function copyToBox(value){
+        $("#location").val(value);
+        hide();
+    }   
+    </script>
+<!-- Search bar code -->
+
+
  </head>
  <body>
   <!-- start header -->
@@ -67,14 +129,11 @@ div.error { background-color: red; color: white; padding: 3px; }
       <ul>
        <li id="search">
         <h2>
-         Search
+         <label for="location">Search:</label>
         </h2>
-        <form method="get" action="">
-         <fieldset>
-          <input type="text" id="s" name="s" value="" />
-          <input type="submit" id="x" value="Search" />
-         </fieldset>
-        </form>
+        <input type="text" id="country" name="country" autocomplete="off" onkeyup="getData(this.value);" /><br />
+        <div id="ajaxresults"></div>
+        <input type="submit" id="x" value="Search" />
        </li>
        <li>
         <h2>
