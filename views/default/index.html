@@ -3,4 +3,15 @@
 <h3>Rating:</h3> {{=auth.user.rating}}<br>
 <h3>Bio:</h3><br>
 {{=auth.user.bio}}<br>
+
+<h4>Locations:</h4>
+<ul>
+{{for location in locations:}}
+   <li>{{=A(location.title ,_href=URL('viewlocation', args=[location.id]))}}
+      created on {{=location.date}}
+      <br>
+      mushroom type: {{=location.mushroom}}
+   </li>
+{{pass}}
+</ul>
  <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>

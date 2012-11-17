@@ -12,7 +12,10 @@
 @auth.requires_login()
 def index():
     user = auth.user
-    return dict(user=user)
+    locations = db(db.location.user == auth.user_id).select(
+                                       orderby=~db.location.date)
+     
+    return dict(user=user, locations=locations)
 
 @auth.requires_login()
 def createprofile(): 
@@ -24,8 +27,29 @@ def createprofile():
        response.flash = 'profile has errors'
    else:
        response.flash = 'Please take a minute to fill out your profile'
+   return dict(form=form)
+
+@auth.requires_login()
+def addlocation():
+   form = SQLFORM(db.location);
+   if form.process().accepted:
+       response.flash = 'location saved'
+       #redirect(URL('viewlocation'))
+   elif form.errors:
+       response.flash = 'location has errors'
+   else:
+       response.flash = 'give us some info about the location'
    return dict(form=form) 
 
+@auth.requires_login()
+def viewlocation():
+   location = db.location(request.args(0)) or redirect(URL('index'))
+   if auth.user_id == location.user:
+      return dict(fullview=True,location=location) 
+    #db(db.trade.user_to == auth.user
+        # ,db.trade.location_from == location, db.trade.approved ==True):
+ 
+   return dict(fullview = False, location=location) 
 
 def ajaxlivesearch():
     partialstr = request.vars.values()[0]
