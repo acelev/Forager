@@ -34,7 +34,8 @@ db.define_table('location',
                 Field('rating', 'integer', default=1,
                                            writable = False),
                 #Field('photo', 'reference photo'),
-                Field('photo', 'upload'),
+                Field('photo', 'upload', uploadfield='picture_file'),
+                Field('picture_file', 'blob'),
                 )
 
 db.define_table('location_rating',

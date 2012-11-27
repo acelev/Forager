@@ -34,7 +34,8 @@ def addlocation():
    form = SQLFORM(db.location);
    if form.process().accepted:
        response.flash = 'location saved'
-       #redirect(URL('viewlocation'))
+       #redirect(URL('viewlocation', request.args[0]))
+       redirect(URL('index'))
    elif form.errors:
        response.flash = 'location has errors'
    else:
@@ -43,18 +44,18 @@ def addlocation():
 
 @auth.requires_login()
 def viewlocation():
-   location = db.location(request.args(0)) or redirect(URL('index'))
+   location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
       return dict(fullview=True,location=location) 
-    #db(db.trade.user_to == auth.user
-        # ,db.trade.location_from == location, db.trade.approved ==True):
+   '''db(db.trade.user_to == auth.user
+        ,db.trade.location_from == location, db.trade.approved == True)'''
  
    return dict(fullview = False, location=location) 
 
 def ajaxlivesearch():
     partialstr = request.vars.values()[0]
     query = db.location.title.like('%'+partialstr+'%')
-    countries = db(query).select(db.location.title)
+    locations = db(query).select(db.location.title)
     items = []
     for (i,location) in enumerate(locations):
         items.append(DIV(A(location.title, _id="res%s"%i, 

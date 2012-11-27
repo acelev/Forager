@@ -59,7 +59,6 @@ div.error { background-color: red; color: white; padding: 3px; }
   </style>
 
 <!-- Search bar code -->
-</style>
     <script type="text/javascript" src="{{=URL(r=request,c='static',f='jquery.js')}}"></script>
     <script type="text/javascript">
     jQuery(document).ready(function(){
@@ -131,134 +130,19 @@ div.error { background-color: red; color: white; padding: 3px; }
         <h2>
          <label for="location">Search:</label>
         </h2>
-        <input type="text" id="country" name="country" autocomplete="off" onkeyup="getData(this.value);" /><br />
+        <input type="text" id="location" name="location" autocomplete="off" onkeyup="getData(this.value);" /><br />
         <div id="ajaxresults"></div>
-        <input type="submit" id="x" value="Search" />
+           <input type="submit" id="x" value="Search"/>
        </li>
        <li>
         <h2>
-         Lorem Ipsum
+         Recent Finds:
         </h2>
         <ul>
-         <li>
-          <a href="#">
-           Fusce dui neque fringilla
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Eget tempor eget nonummy
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Nec metus sed donec
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Velit semper nisi molestie
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Eget tempor eget nonummy
-          </a>
-         </li>
-        </ul>
-       </li>
-       <li>
-        <h2>
-         Volutpat Dolore
-        </h2>
-        <ul>
-         <li>
-          <a href="#">
-           Nec metus sed donec
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Velit semper nisi molestie
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Eget tempor eget nonummy
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Nec metus sed donec
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Velit semper nisi molestie
-          </a>
-         </li>
-        </ul>
-       </li>
-       <li>
-        <h2>
-         faucibus lobortis
-        </h2>
-        <ul>
-         <li>
-          <a href="#">
-           Nec metus sed donec
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Velit semper nisi molestie
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Eget tempor eget nonummy
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Nec metus sed donec
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Magna lacus bibendum mauris
-          </a>
-         </li>
-         <li>
-          <a href="#">
-           Velit semper nisi molestie
-          </a>
-         </li>
+         {{locations=db(db.location).select(orderby=~db.location.date|db.location.rating)}}
+         {{for location in locations:}}
+            <li>{{=A(location.title, _href=URL('viewlocation', args=[location.id]))}}<br><sup><small> by: {{=location.user.user_name}}  on {{=location.date.date()}}</small></sup></li>
+        {{pass}}  
         </ul>
        </li>
       </ul>

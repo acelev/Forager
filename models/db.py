@@ -54,7 +54,8 @@ db.define_table(
     Field('zip'),
     Field('bio', 'text', default=''),
     Field('rating', 'integer', default=1, readable=False, writable=False),
-    Field('image', 'upload'),
+    Field('image', 'upload', uploadfield='picture_file'),
+    Field('picture_file', 'blob'),
     Field('date', 'datetime', default=datetime.utcnow(), writable=False),
     Field('registration_key', length=512,                # required
           writable=False, readable=False, default=''),
