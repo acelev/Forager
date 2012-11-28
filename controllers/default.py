@@ -14,8 +14,10 @@ def index():
     user = auth.user
     locations = db(db.location.user == auth.user_id).select(
                                        orderby=~db.location.date)
+    pendingtrades = db(db.trade).select()
      
-    return dict(user=user, locations=locations)
+    return dict(user=user, locations=locations,
+pendingtrades=pendingtrades)
 
 @auth.requires_login()
 def createprofile(): 
@@ -31,29 +33,29 @@ def createprofile():
 
 @auth.requires_login()
 def trade():
-   if not request.args:
+   if session.location == None:
       redirect(URL('index'))
-   db.trade.user_to.default = db.location[request.args[0]].user
+   location = session.location
+   session.location = None
+   db.trade.user_to.default = db.auth_user[location.user]
    db.trade.user_from.default = auth.user
    db.trade.approved.default  = False; 
-   db.trade.location_to.defualt = db(db.location.id ==
-request.args[0]).select().first()
+   db.trade.location_to.defualt = location
    form = SQLFORM(db.trade) 
    if form.process().accepted:
-      response.flash = 'trade sent'
-      redirect(URL('viewlocation', request.args[0])) or redirect('index')
+      #response.flash = 'trade sent'
+      redirect(URL('viewlocation', args=[location.id])) 
    elif form.errors:
       response.flash = 'trade has errors'
    else:
-      response.flash = 'enter trade information'
-   return dict(form=form) 
+      response.flash = 'pick a location to trade!'
+   return dict(form=form,location=location, user=db.auth_user[location.user] ) 
 
 @auth.requires_login()
 def addlocation():
    form = SQLFORM(db.location)
    if form.process().accepted:
        response.flash = 'location saved'
-       #redirect(URL('viewlocation', request.args[0]))
        redirect(URL('index'))
    elif form.errors:
        response.flash = 'location has errors'

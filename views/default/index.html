@@ -13,6 +13,11 @@
       mushroom type: {{=location.mushroom}}
    </li>
 {{pass}}
+
+<ul>
+{{for trade in pendingtrades:}}
+<li>{{=trade.user_from.user_name}}</li>
+{{pass}}
     <a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 </ul>
  <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>

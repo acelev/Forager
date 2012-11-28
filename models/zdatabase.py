@@ -24,21 +24,23 @@ db.define_table('location',
 
 
 db.define_table('trade',
-                Field('user_to', 'reference auth_user', #readable = False,
+                Field('user_to', 'reference auth_user', readable = False,
                                                    writable = False),
                 Field('user_from', 'reference auth_user', default =
                                                      auth.user,
-                                                    #readable = False,
+                                                    readable = False,
                                                     writable = False),
                 Field('location_to', 'reference location',
-                                                    writable = False
-                ),
+                                                    writable = False,
+
+                                                    readable = False),
                 Field('location_from', 'reference location', 
                   requires = IS_IN_DB(db(db.location.user ==
                            auth.user_id), db.location.title)
                 ),
                 Field('approved', 'boolean', default = False,
-                                             writable = False),
+                                             writable = False,
+                                             readable = False),
                 Field('date', 'datetime',default=datetime.utcnow(),
                                                     readable = False,
                                                     writable = False),

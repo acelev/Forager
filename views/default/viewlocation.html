@@ -22,6 +22,7 @@ showPosition()
 </script>
 GPS Coordinates: {{=location.latitude}} {{=location.longitude}}
 {{else:}}
-<a href="{{=URL('trade', args=[location.id])}}"><button>Trade Location</button></a>
+{{session.location =location}}
+<a href="{{=URL('trade')}}"><button>Trade Location</button></a>
 {{pass}}
 {{pass}}
