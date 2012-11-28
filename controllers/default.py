@@ -30,8 +30,27 @@ def createprofile():
    return dict(form=form)
 
 @auth.requires_login()
+def trade():
+   if not request.args:
+      redirect(URL('index'))
+   db.trade.user_to.default = db.location[request.args[0]].user
+   db.trade.user_from.default = auth.user
+   db.trade.approved.default  = False; 
+   db.trade.location_to.defualt = db(db.location.id ==
+request.args[0]).select().first()
+   form = SQLFORM(db.trade) 
+   if form.process().accepted:
+      response.flash = 'trade sent'
+      redirect(URL('viewlocation', request.args[0])) or redirect('index')
+   elif form.errors:
+      response.flash = 'trade has errors'
+   else:
+      response.flash = 'enter trade information'
+   return dict(form=form) 
+
+@auth.requires_login()
 def addlocation():
-   form = SQLFORM(db.location);
+   form = SQLFORM(db.location)
    if form.process().accepted:
        response.flash = 'location saved'
        #redirect(URL('viewlocation', request.args[0]))
@@ -47,8 +66,8 @@ def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
       return dict(fullview=True,location=location) 
-   '''db(db.trade.user_to == auth.user
-        ,db.trade.location_from == location, db.trade.approved == True)'''
+   #db(db.trade.user_to == auth.user
+       # ,db.trade.location_from == location, db.trade.approved == True)
  
    return dict(fullview = False, location=location) 
 

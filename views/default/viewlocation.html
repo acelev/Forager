@@ -21,4 +21,7 @@ document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
 showPosition()
 </script>
 GPS Coordinates: {{=location.latitude}} {{=location.longitude}}
+{{else:}}
+<a href="{{=URL('trade', args=[location.id])}}"><button>Trade Location</button></a>
+{{pass}}
 {{pass}}

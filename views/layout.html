@@ -140,9 +140,11 @@ div.error { background-color: red; color: white; padding: 3px; }
         </h2>
         <ul>
          {{locations=db(db.location).select(orderby=~db.location.date|db.location.rating)}}
+         {{if locations == None:}}
          {{for location in locations:}}
             <li>{{=A(location.title, _href=URL('viewlocation', args=[location.id]))}}<br><sup><small> by: {{=location.user.user_name}}  on {{=location.date.date()}}</small></sup></li>
         {{pass}}  
+         {{pass}}
         </ul>
        </li>
       </ul>

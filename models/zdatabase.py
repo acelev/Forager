@@ -1,22 +1,6 @@
 # coding: utf8
 from datetime import datetime
 
-
-db.define_table('trade',
-                Field('user_to', 'reference auth_user', readable = False,
-                                                   writable = False),
-                Field('user_from', 'reference auth_user', default =
-                                                     auth.user,
-                                                    readable = False,
-                                                    writable = False),
-                Field('location_to', 'reference location'
-          #,requires= IS_IN(db().select(db.location.user.user == auth.user
-                ),
-                Field('location_from', 'reference location'),
-                Field('approved', 'boolean'),
-                Field('date', 'datetime',default=datetime.utcnow()),
-                )
-
 db.define_table('location',
                 Field('user', 'reference auth_user', default=auth.user_id,
                                           readable = False,
@@ -36,6 +20,28 @@ db.define_table('location',
                 #Field('photo', 'reference photo'),
                 Field('photo', 'upload', uploadfield='picture_file'),
                 Field('picture_file', 'blob'),
+                )
+
+
+db.define_table('trade',
+                Field('user_to', 'reference auth_user', #readable = False,
+                                                   writable = False),
+                Field('user_from', 'reference auth_user', default =
+                                                     auth.user,
+                                                    #readable = False,
+                                                    writable = False),
+                Field('location_to', 'reference location',
+                                                    writable = False
+                ),
+                Field('location_from', 'reference location', 
+                  requires = IS_IN_DB(db(db.location.user ==
+                           auth.user_id), db.location.title)
+                ),
+                Field('approved', 'boolean', default = False,
+                                             writable = False),
+                Field('date', 'datetime',default=datetime.utcnow(),
+                                                    readable = False,
+                                                    writable = False),
                 )
 
 db.define_table('location_rating',
