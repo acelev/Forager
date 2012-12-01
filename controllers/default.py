@@ -14,10 +14,9 @@ def index():
     user = auth.user
     locations = db(db.location.user == auth.user_id).select(
                                        orderby=~db.location.date)
-    pendingtrades = db(db.trade).select()
+    pendingtrades = db(db.trade.user_from == auth.user_id).select()
      
-    return dict(user=user, locations=locations,
-pendingtrades=pendingtrades)
+    return dict(user=user, locations=locations, pendingtrades=pendingtrades)
 
 @auth.requires_login()
 def createprofile(): 
