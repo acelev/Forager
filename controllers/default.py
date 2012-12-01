@@ -35,15 +35,18 @@ def createprofile():
 def trade():
    if session.location == None:
       redirect(URL('index'))
-   location = session.location
-   session.location = None
+   location = db.location[session.location]
+   db.trade.user_from.readable = db.trade.user_from.writable = False
    db.trade.user_to.default = db.auth_user[location.user]
-   db.trade.user_from.default = auth.user
-   db.trade.approved.default  = False; 
-   db.trade.location_to.defualt = location
+   db.trade.user_to.readable = db.trade.user_to.writable = False
+   db.trade.approved.default  = False
+   db.trade.approved.readable = db.trade.approved.writable = False
+   db.trade.location_to.default = location 
+   db.trade.location_to.readable = db.trade.location_to.writable = False
    form = SQLFORM(db.trade) 
    if form.process().accepted:
       #response.flash = 'trade sent'
+      session.location = None
       redirect(URL('viewlocation', args=[location.id])) 
    elif form.errors:
       response.flash = 'trade has errors'
