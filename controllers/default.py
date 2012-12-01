@@ -70,8 +70,10 @@ def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
       return dict(fullview=True,location=location) 
-   #db(db.trade.user_to == auth.user
-       # ,db.trade.location_from == location, db.trade.approved == True)
+   trade = db(db.trade.user_to == auth.user_id, db.trade.location_from
+== location).select().first()
+   if trade and trade.approved:
+      return dict(fullview=True, location=location)
  
    return dict(fullview = False, location=location) 
 
