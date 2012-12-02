@@ -1,4 +1,5 @@
 {{extend 'layout.html'}}
+</script>
 <h2>{{=auth.user.user_name}} <sub><small>Rating: {{=auth.user.rating}}</small></sub></h2>
 <img height='200' width='200' src="{{=URL('download',args=user.image)}}"/>
 <h3>Bio:</h3><br>
@@ -13,10 +14,16 @@
       mushroom type: {{=location.mushroom}}
    </li>
 {{pass}}
-
+</ul>
 <ul>
+
 {{for trade in pendingtrades:}}
-<li>{{=trade.user_from.user_name}} </li>
+<li> Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
+args=[trade.location_from.id]))}} submitted by:
+{{=A(trade.user_from.user_name, _href=URL('viewuser',args=[trade.user_from.id]))}}
+<br>
+{{=A('view trade', _href=URL('viewtrade', args=[trade.id]))}}
+</li>
 {{pass}}
     <a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 </ul>

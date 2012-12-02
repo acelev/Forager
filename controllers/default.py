@@ -8,6 +8,8 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
+import helpfunctions
+
 
 @auth.requires_login()
 def index():
@@ -16,7 +18,7 @@ def index():
                                        orderby=~db.location.date)
     pendingtrades = db(db.trade.user_to == auth.user_id).select()
      
-    return dict(user=user, locations=locations, pendingtrades=pendingtrades)
+    return dict(user=user, locations=locations,pendingtrades=pendingtrades)
 
 @auth.requires_login()
 def createprofile(): 
@@ -30,11 +32,25 @@ def createprofile():
        response.flash = 'Please take a minute to fill out your profile'
    return dict(form=form)
 
+
+@auth.requires_login()
 def viewuser():
   user = db.auth_user[request.args[0]] or redirect(URL('index'))
   locations = db(db.location.user == user.id).select(
                                        orderby=~db.location.date)
   return dict(user=user, locations=locations)
+ 
+def accept(trade):
+   db.trade[trade.id].approved = True
+   db.commit
+   redirect(URL('index'))
+
+@auth.requires_login()
+def viewtrade():
+  trade = db.trade[request.args[0]] or redirect(URL('index'))
+  form = SQLFORM.factory(
+            Field(A('Accept', accept(trade))))
+  return dict(trade=trade, form=form)
 
 @auth.requires_login()
 def trade():
@@ -75,15 +91,15 @@ def addlocation():
 def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
-      return dict(fullview=True,location=location, trade=trade) 
+      return dict(fullview=True,location=location) 
    trade = db((db.trade.user_from == auth.user_id) &
 (db.trade.location_to == location)).select().first()
    if trade <> None and trade.approved:
-      return dict(fullview=True, location=location, trade=trade)
+      return dict(fullview=True, location=location) 
    othertrade = db((db.trade.user_to == auth.user_id) &
 (db.trade.location_from == location)).select().first()
    if othertrade <> None  and othertrade.approved:
-      return dict(fullview=True, location=location, trade=othertrade) 
+      return dict(fullview=True, location=location) 
  
    return dict(fullview = False, location=location, trade=trade) 
 
@@ -98,6 +114,7 @@ def ajaxlivesearch():
           _id="resultLiveSearch"))
 
     return TAG[''](*items) 
+
 
 def user():
     """

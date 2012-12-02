@@ -28,3 +28,5 @@ response.menu = [
     (T('Forum'), False, URL('default','index'), []),
     (T('About'), False, URL('default','index'), []),
     ]
+
+
