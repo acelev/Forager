@@ -34,7 +34,7 @@ db.define_table('trade',
                                                     #writable = False,
                                                     #readable = False),
                 Field('location_from', 'reference location', requires =
-                  IS_IN_DB(db(db.location.user == auth.user_id), 'location.id')),
+                  IS_IN_DB(db(db.location.user == auth.user_id), 'location.id') ),
                 Field('approved', 'boolean' ),#default = False,
                                              #writable = False,
                                              #readable = False),

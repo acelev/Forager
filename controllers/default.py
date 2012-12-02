@@ -17,12 +17,12 @@ def index():
     locations = db(db.location.user == auth.user_id).select(
                                        orderby=~db.location.date)
     pendingtrades = db((db.trade.user_to == auth.user_id)
-& (db.trade.approved == False)).select()
+      & (db.trade.approved == False)).select(orderby=~db.trade.date)
     approvedtrades = db((db.trade.user_to == auth.user_id)
-&(db.trade.approved == True)).select()
+      &(db.trade.approved == True)).select(orderby=~db.trade.date)
      
     return dict(user=user,
-locations=locations,pendingtrades=pendingtrades, approvedtrades=approvedtrades)
+            locations=locations,pendingtrades=pendingtrades, approvedtrades=approvedtrades)
 
 @auth.requires_login()
 def createprofile(): 
@@ -111,11 +111,11 @@ def viewlocation():
    if auth.user_id == location.user:
       return dict(fullview=True,location=location) 
    trade = db((db.trade.user_from == auth.user_id) &
-(db.trade.location_to == location)).select().first()
+            (db.trade.location_to == location)).select().first()
    if trade <> None and trade.approved:
       return dict(fullview=True, location=location) 
    othertrade = db((db.trade.user_to == auth.user_id) &
-(db.trade.location_from == location)).select().first()
+               (db.trade.location_from == location)).select().first()
    if othertrade <> None  and othertrade.approved:
       return dict(fullview=True, location=location) 
  
