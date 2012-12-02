@@ -42,14 +42,11 @@ def trade():
    db.trade.approved.readable = db.trade.approved.writable = False
    db.trade.location_to.default = location 
    db.trade.location_to.readable = db.trade.location_to.writable = False
-   #query = db(db.location.user == auth.user_id).select()
-   #db.trade.location_from.requires = IS_IN_DB(query, 
-   #                                 'location.title', zero=T('choose location'))
    form = SQLFORM(db.trade) 
    if form.process().accepted:
       response.flash = form.vars.location_from 
       session.location = None
-      #redirect(URL('viewlocation', args=[location.id])) 
+      redirect(URL('viewlocation', args=[location.id])) 
    elif form.errors:
       response.flash = 'trade has errors'
    else:
@@ -73,7 +70,7 @@ def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
       return dict(fullview=True,location=location) 
-   trade = db(db.trade.user_to == auth.user_id, db.trade.location_from
+   trade = db(db.trade.user_from == auth.user_id, db.trade.location_from
 == location).select().first()
    if trade and trade.approved:
       return dict(fullview=True, location=location)
