@@ -16,7 +16,7 @@
 
 <ul>
 {{for trade in pendingtrades:}}
-<li>{{=trade.user_to.user_name}} </li>
+<li>{{=trade.user_from.user_name}} </li>
 {{pass}}
     <a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 </ul>

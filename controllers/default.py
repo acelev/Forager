@@ -14,7 +14,7 @@ def index():
     user = auth.user
     locations = db(db.location.user == auth.user_id).select(
                                        orderby=~db.location.date)
-    pendingtrades = db(db.trade.user_from == auth.user_id).select()
+    pendingtrades = db(db.trade.user_to == auth.user_id).select()
      
     return dict(user=user, locations=locations, pendingtrades=pendingtrades)
 
@@ -42,11 +42,14 @@ def trade():
    db.trade.approved.readable = db.trade.approved.writable = False
    db.trade.location_to.default = location 
    db.trade.location_to.readable = db.trade.location_to.writable = False
+   #query = db(db.location.user == auth.user_id).select()
+   #db.trade.location_from.requires = IS_IN_DB(query, 
+   #                                 'location.title', zero=T('choose location'))
    form = SQLFORM(db.trade) 
    if form.process().accepted:
-      #response.flash = 'trade sent'
+      response.flash = form.vars.location_from 
       session.location = None
-      redirect(URL('viewlocation', args=[location.id])) 
+      #redirect(URL('viewlocation', args=[location.id])) 
    elif form.errors:
       response.flash = 'trade has errors'
    else:
