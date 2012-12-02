@@ -16,9 +16,13 @@ def index():
     user = auth.user
     locations = db(db.location.user == auth.user_id).select(
                                        orderby=~db.location.date)
-    pendingtrades = db(db.trade.user_to == auth.user_id).select()
+    pendingtrades = db((db.trade.user_to == auth.user_id)
+& (db.trade.approved == False)).select()
+    approvedtrades = db((db.trade.user_to == auth.user_id)
+&(db.trade.approved == True)).select()
      
-    return dict(user=user, locations=locations,pendingtrades=pendingtrades)
+    return dict(user=user,
+locations=locations,pendingtrades=pendingtrades, approvedtrades=approvedtrades)
 
 @auth.requires_login()
 def createprofile(): 
@@ -41,16 +45,30 @@ def viewuser():
   return dict(user=user, locations=locations)
  
 def accept(trade):
-   db.trade[trade.id].approved = True
-   db.commit
+   #db.trade[trade.id].update(approved = True) 
+   trade.approved = True
+   trade.update_record()
+   db.commit()
+   redirect(URL('index'))
+
+def declined(trade):
+   db(db.trade.id == trade.id).delete()
+   db.commit()
    redirect(URL('index'))
 
 @auth.requires_login()
 def viewtrade():
-  trade = db.trade[request.args[0]] or redirect(URL('index'))
-  form = SQLFORM.factory(
-            Field(A('Accept', accept(trade))))
-  return dict(trade=trade, form=form)
+   trade = db.trade[request.args[0]] or redirect(URL('index'))
+   if trade.approved:
+      form = FORM(INPUT(_type='submit', _name='decline', _value='Remove'))
+   else:
+      form = FORM(INPUT(_type='submit', _name='accept', _value= 'Accept'),
+                  INPUT(_type='submit', _name='decline', _value='Decline')) 
+   if request.vars['accept']:
+      accept(trade) 
+   elif request.vars['decline']:
+      declined(trade)
+   return dict(trade=trade, form=form)
 
 @auth.requires_login()
 def trade():
