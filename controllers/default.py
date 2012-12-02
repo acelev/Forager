@@ -30,6 +30,12 @@ def createprofile():
        response.flash = 'Please take a minute to fill out your profile'
    return dict(form=form)
 
+def viewuser():
+  user = db.auth_user[request.args[0]] or redirect(URL('index'))
+  locations = db(db.location.user == user.id).select(
+                                       orderby=~db.location.date)
+  return dict(user=user, locations=locations)
+
 @auth.requires_login()
 def trade():
    if session.location == None:
