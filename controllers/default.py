@@ -69,13 +69,17 @@ def addlocation():
 def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    if auth.user_id == location.user:
-      return dict(fullview=True,location=location) 
-   trade = db(db.trade.user_from == auth.user_id, db.trade.location_from
-== location).select().first()
-   if trade and trade.approved:
-      return dict(fullview=True, location=location)
+      return dict(fullview=True,location=location, trade=trade) 
+   trade = db((db.trade.user_from == auth.user_id) &
+(db.trade.location_to == location)).select().first()
+   if trade <> None and trade.approved:
+      return dict(fullview=True, location=location, trade=trade)
+   othertrade = db((db.trade.user_to == auth.user_id) &
+(db.trade.location_from == location)).select().first()
+   if othertrade <> None  and othertrade.approved:
+      return dict(fullview=True, location=location, trade=othertrade) 
  
-   return dict(fullview = False, location=location) 
+   return dict(fullview = False, location=location, trade=trade) 
 
 def ajaxlivesearch():
     partialstr = request.vars.values()[0]
