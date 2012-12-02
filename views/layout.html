@@ -131,8 +131,12 @@ div.error { background-color: red; color: white; padding: 3px; }
          <label for="location">Search:</label>
         </h2>
         <input type="text" id="location" name="location" autocomplete="off" onkeyup="getData(this.value);" /><br />
+        <script type="text/javascript">
+        value = $('location').val()
+        {{thing=value}}
+        </script>
         <div id="ajaxresults"></div>
-           <input type="submit" id="x" value="Search"/>
+           {{=A(XML('<input type="submit" id="x" value="Search"/>'), _href=URL('search', args=[thing]))}}
        </li>
        <li>
         <h2>
