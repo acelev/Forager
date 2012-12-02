@@ -8,6 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
+import re
 
 @auth.requires_login()
 def index():
@@ -35,6 +36,24 @@ def viewuser():
   locations = db(db.location.user == user.id).select(
                                        orderby=~db.location.date)
   return dict(user=user, locations=locations)
+
+def search():
+  syntax = re.compile('^.*$')
+  order = db.location.date
+  search_terms = request.args
+  results = []
+  if search_terms == '':
+    results = db().select(db.location.ALL)
+    return dict(results=results)
+  for terms in search_terms:
+    terms = terms.lower()
+    terms = syntax.findall(terms)
+    for term in terms:
+      term = term.split('_')
+      for word in term:
+        word = '%'+word+'%'
+        results += db(db.location.title.lower().like(word)).select(orderby=~order)
+  return dict(results=results)
 
 @auth.requires_login()
 def trade():
