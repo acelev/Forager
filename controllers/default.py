@@ -42,6 +42,8 @@ def trade():
    db.trade.approved.readable = db.trade.approved.writable = False
    db.trade.location_to.default = location 
    db.trade.location_to.readable = db.trade.location_to.writable = False
+   db.trade.location_from.requires = IS_IN_DB(db(db.location.user == auth.user_id).select(), 
+                                    'title', zero=T('choose location'))
    form = SQLFORM(db.trade) 
    if form.process().accepted:
       #response.flash = 'trade sent'

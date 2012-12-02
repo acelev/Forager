@@ -33,9 +33,10 @@ db.define_table('trade',
                 Field('location_to', 'reference location'), #default = db.location[0],
                                                     #writable = False,
                                                     #readable = False),
-                Field('location_from', 'reference location', 
-                  requires = IS_IN_DB(db(db.location.user ==
-                           auth.user_id), db.location.title) ),
+                Field('location_from', 'reference location'),
+                  #default = 0, 
+                  #requires = IS_IN_DB(db(db.location.user ==
+                  #         auth.user_id).select(), 'title', zero=T('choose location'))),
                 Field('approved', 'boolean' ),#default = False,
                                              #writable = False,
                                              #readable = False),
