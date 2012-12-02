@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+<h2>{{=user.user_name}} <sub><small>Rating: {{=user.rating}}</small></sub></h2>
+<img height='200' width='200' src="{{=URL('download',args=user.image)}}"/>
+<h3>Bio:</h3><br>
+{{=user.bio}}<br>
+
+<h4>Locations:</h4>
+<ul>
+{{for location in locations:}}
+   <li>{{=A(location.title ,_href=URL('viewlocation', args=[location.id]))}}
+      created on {{=location.date}}
+      <br>
+      mushroom type: {{=location.mushroom}}
+   </li>
+{{pass}}
+
+<ul>
+    <a href="{{=URL('')}}"><button>Send Message</button></a>
+</ul>
