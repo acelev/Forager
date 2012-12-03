@@ -1,23 +1,20 @@
 {{extend 'layout.html'}}
+</script>
 <h2>{{=auth.user.user_name}} <sub><small>Rating: {{=auth.user.rating}}</small></sub></h2>
 <img height='200' width='200' src="{{=URL('download',args=user.image)}}"/>
 <h3>Bio:</h3><br>
 {{=auth.user.bio}}<br>
 
-<h4>Locations:</h4>
-<ul>
-{{for location in locations:}}
-   <li>{{=A(location.title ,_href=URL('viewlocation', args=[location.id]))}}
-      created on {{=location.date}}
-      <br>
-      mushroom type: {{=location.mushroom}}
-   </li>
+<h3>{{=A('view locations', _href=URL('viewlocations', args=[auth.user_id,
+0]))}}</h3>
+<a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
+
+
+{{if pendingtrades:}}
+<a href="{{=URL('viewpendingtrades', args =[auth.user_id,
+0])}}"><button>You've got pending trades</button></a>
 {{pass}}
 
-<ul>
-{{for trade in pendingtrades:}}
-<li>{{=trade.user_from.user_name}} </li>
-{{pass}}
-    <a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
-</ul>
+<a href="{{=URL('viewtrades', args =[auth.user_id, 0])}}"><button>View Trades</button></a>
+
  <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>

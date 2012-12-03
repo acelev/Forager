@@ -12,7 +12,8 @@ document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
 </script>
 <h2>{{=location.title}} <sub><small>Rating: {{=location.rating}}</small></sub></h2>
 <h4><i>{{=location.mushroom}}</i></h4>
-<hr>submitted by {{=location.user.user_name}} on {{=location.date}}<br>
+<hr>submitted by {{=A(location.user.user_name, _href = URL('viewuser',
+args=[location.user.id]))}} on {{=location.date}}<br>
 <img src="{{=URL('download',args=location.photo)}}" />
 <p>{{=location.note}}</p>
 <hr>
