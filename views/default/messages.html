@@ -27,14 +27,21 @@
     <div>
         {{for message in inbox:}}
         <ul>
-            <li>{{=message.subject}}
+            
+              <img height='40' width='40' src="{{=URL('download',args=message.user_from.image)}}"/>
+              {{if message.read  == False:}}
+              <b>New</b>
+              {{pass}}
+               <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> From: <a href="{{=URL('viewuser', args=message.user_from)}}">{{=message.user_from.user_name}}</a> on: {{=message.date}}</sub>
         </ul>
         {{pass}}
     </div>
 	<div>
 	    {{for message in sent:}}
         <ul>
-            <li>{{=message.subject}}
+            
+              <img height='40' width='40' src="{{=URL('download',args=message.user_to.image)}}"/>
+               <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> To: <a href="{{=URL('viewuser', args=message.user_to)}}">{{=message.user_to.user_name}}</a> on: {{=message.date}}</sub>
         </ul>
         {{pass}}
 	</div>

@@ -8,7 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-import helpfunctions
+import re
 
 
 @auth.requires_login()
@@ -20,8 +20,8 @@ def index():
       & (db.trade.approved == False)).select(orderby=~db.trade.date)
     approvedtrades = db((db.trade.user_to == auth.user_id) | (db.trade.user_from == auth.user_id) 
       &(db.trade.approved == True)).select(orderby=~db.trade.date)
-     
-    return dict(user=user,
+    newmessages = db((db.message.user_to==auth.user)&(db.message.read==False)).count()
+    return dict(user=user, newmessages=newmessages,
             locations=locations,pendingtrades=pendingtrades, approvedtrades=approvedtrades)
 
 @auth.requires_login()
@@ -173,6 +173,9 @@ def messages():
 @auth.requires_login()
 def viewmessage():
   message = db.message[request.args[0]]
+  message.read = True
+  message.update_record()
+  db.commit()
   sender = message.user_from
   if message == None:
     redirect(URL('messages'))
@@ -180,29 +183,30 @@ def viewmessage():
 
 @auth.requires_login()
 def newmessage():
-  db.message.user_to.default=db.auth_user[request.args[0]]
-  db.message.user_from.default=auth.user
-  db.message.user_to.writable=db.message.user_to.readable=False
-  db.message.user_from.writable=db.message.user_from.readable=False
-  db.message.note.default=""
-  db.message.read.default=False
-  db.message.read.readable=db.message.read.writable=False
-  db.message.date.readable=db.message.date.writable=False
-  sender=auth.user
-  recipient=db.auth_user[request.args[0]]
-
   if request.args[0] == 'reply':
     message = db.message[request.args[1]]
     db.message.user_to.default=message.user_from
     db.message.user_from.default=auth.user
     db.message.user_to.writable=db.message.user_to.readable=False
     db.message.user_from.writable=db.message.user_from.readable=False
-    db.message.subject.default='Re:'+message.note
-    db.message.note.default=message.note
+    db.message.subject.default='Re:'+message.subject
+    note = '\n\n\nOn '+str(message.date)+' '+message.user_from.user_name+' wrote: \n'+message.note
+    db.message.note.default=note
     db.message.read.default=False
     db.message.read.readable=db.message.read.writable=False
     db.message.date.readable=db.message.date.writable=False
-    recipient=db.auth_user[request.args[1]]
+    recipient=message.user_from
+  else:
+    db.message.user_to.default=db.auth_user[request.args[0]]
+    db.message.user_from.default=auth.user
+    db.message.user_to.writable=db.message.user_to.readable=False
+    db.message.user_from.writable=db.message.user_from.readable=False
+    db.message.note.default=""
+    db.message.read.default=False
+    db.message.read.readable=db.message.read.writable=False
+    db.message.date.readable=db.message.date.writable=False
+    recipient=db.auth_user[request.args[0]]
+  sender=auth.user
 
   form = SQLFORM(db.message)
   if form.process().accepted:

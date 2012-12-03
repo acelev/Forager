@@ -1,7 +1,12 @@
 {{extend 'layout.html'}}
 Subject: <strong>{{=message.subject}}</strong><br>
-From: <strong>{{=sender.user_name}}</strong><br>
+From: <img height='40' width='40' src="{{=URL('download',args=sender.image)}}"/> <strong>{{=sender.user_name}}</strong><br>
 <hr>
 Message: <p>{{=message.note}}</p>
 <hr>
 Sent on: {{=message.date}}
+<br>
+<a href="{{=URL('messages')}}"><button>Back</button></a>
+<a href="{{=URL('newmessage', args =['reply', message.id])}}"><button>Reply</button></a>
+
+<a href="{{=URL('index')}}"><button>Delete</button></a>
