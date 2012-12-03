@@ -18,7 +18,7 @@ def index():
                                        orderby=~db.location.date)
     pendingtrades = db((db.trade.user_to == auth.user_id)
       & (db.trade.approved == False)).select(orderby=~db.trade.date)
-    approvedtrades = db((db.trade.user_to == auth.user_id)
+    approvedtrades = db((db.trade.user_to == auth.user_id) | (db.trade.user_from == auth.user_id) 
       &(db.trade.approved == True)).select(orderby=~db.trade.date)
      
     return dict(user=user,
@@ -43,9 +43,41 @@ def viewuser():
   locations = db(db.location.user == user.id).select(
                                        orderby=~db.location.date)
   return dict(user=user, locations=locations)
- 
+
+def pagination(query,itemsPerPage, page, orderby):
+   limitby = (page*itemsPerPage,(page+1)*itemsPerPage+1)
+   return db(query).select(orderby=orderby, limitby=limitby) 
+   
+
+@auth.requires_login()
+def viewlocations():
+   user = db.auth_user[request.args[0]] or redirect(URL('index'))
+   page = int(request.args[1]) or 0
+   query = (db.location.user == user)
+   orderby = ~db.location.date
+   return dict(user=user,page=page, locations = pagination(query, 4,
+page, orderby))
+
+@auth.requires_login()
+def viewpendingtrades():
+   user = db.auth_user[request.args[0]] or redirect(URL('index'))
+   page = int(request.args[1]) or 0
+   query = (db.trade.user_to == auth.user_id) & (db.trade.approved == False)
+   orderby = ~db.trade.date
+   return dict(user=user,page=page, pendingtrades = pagination(query, 4,
+page,orderby))
+
+
+@auth.requires_login()
+def viewtrades():
+   user = db.auth_user[request.args[0]] or redirect(URL('index'))
+   page = int(request.args[1]) or 0
+   query = (db.trade.user_to == auth.user_id) | (db.trade.user_from == auth.user_id) & (db.trade.approved == True)
+   orderby = ~db.trade.date
+   return dict(user=user,page=page, approvedtrades = pagination(query, 4,
+page,orderby))
+
 def accept(trade):
-   #db.trade[trade.id].update(approved = True) 
    trade.approved = True
    trade.update_record()
    db.commit()

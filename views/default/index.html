@@ -5,37 +5,16 @@
 <h3>Bio:</h3><br>
 {{=auth.user.bio}}<br>
 
-<h4>Locations:</h4>
-<ul>
-{{for location in locations:}}
-   <li>{{=A(location.title ,_href=URL('viewlocation', args=[location.id]))}}
-      created on {{=location.date}}
-      <br>
-      mushroom type: {{=location.mushroom}}
-   </li>
-{{pass}}
-</ul>
-<ul>
+<h3>{{=A('view locations', _href=URL('viewlocations', args=[auth.user_id,
+0]))}}</h3>
+<a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 
-<h4> Pending Trades </h4>
-{{for trade in pendingtrades:}}
-<li> Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
-args=[trade.location_from.id]))}} submitted by:
-{{=A(trade.user_from.user_name, _href=URL('viewuser',args=[trade.user_from.id]))}}
-<br>
-{{=A('view trade', _href=URL('viewtrade', args=[trade.id]))}}
-</li>
+
+{{if pendingtrades:}}
+<a href="{{=URL('viewpendingtrades', args =[auth.user_id,
+0])}}"><button>You've got pending trades</button></a>
 {{pass}}
 
-<h4> Trades </h4>
-{{for trade in approvedtrades:}}
-<li> Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
-args=[trade.location_from.id]))}} submitted by:
-{{=A(trade.user_from.user_name, _href=URL('viewuser',args=[trade.user_from.id]))}}
-<br>
-{{=A('view trade', _href=URL('viewtrade', args=[trade.id]))}}
-</li>
-{{pass}}
-    <a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
-</ul>
+<a href="{{=URL('viewtrades', args =[auth.user_id, 0])}}"><button>View Trades</button></a>
+
  <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>
