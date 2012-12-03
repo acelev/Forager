@@ -95,6 +95,55 @@ def ajaxlivesearch():
           _id="resultLiveSearch"))
 
     return TAG[''](*items) 
+@auth.requires_login()
+def messages():
+  inbox = db(db.message.user_to == auth.user_id).select(orderby=~db.message.date)
+  sent = db(db.message.user_from == auth.user).select(orderby=~db.message.date)
+  return dict(inbox=inbox, sent=sent)
+
+@auth.requires_login()
+def viewmessage():
+  message = db.message[request.args[0]]
+  sender = message.user_from
+  if message == None:
+    redirect(URL('messages'))
+  return dict(message=message, sender=sender)
+
+@auth.requires_login()
+def newmessage():
+  db.message.user_to.default=db.auth_user[request.args[0]]
+  db.message.user_from.default=auth.user
+  db.message.user_to.writable=db.message.user_to.readable=False
+  db.message.user_from.writable=db.message.user_from.readable=False
+  db.message.note.default=""
+  db.message.read.default=False
+  db.message.read.readable=db.message.read.writable=False
+  db.message.date.readable=db.message.date.writable=False
+  sender=auth.user
+  recipient=db.auth_user[request.args[0]]
+
+  if request.args[0] == 'reply':
+    message = db.message[request.args[1]]
+    db.message.user_to.default=message.user_from
+    db.message.user_from.default=auth.user
+    db.message.user_to.writable=db.message.user_to.readable=False
+    db.message.user_from.writable=db.message.user_from.readable=False
+    db.message.subject.default='Re:'+message.note
+    db.message.note.default=message.note
+    db.message.read.default=False
+    db.message.read.readable=db.message.read.writable=False
+    db.message.date.readable=db.message.date.writable=False
+    recipient=db.auth_user[request.args[1]]
+
+  form = SQLFORM(db.message)
+  if form.process().accepted:
+    response.flash = 'message sent'
+    redirect(URL('messages'))
+  elif form.errors:
+    response.flash = 'message has errors'
+  else:
+    response.flash = 'fill out message'
+  return dict(form=form, sender=sender, recipient=recipient)
 
 def user():
     """
