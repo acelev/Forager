@@ -1,0 +1,50 @@
+{{extend 'layout.html'}}
+<head>
+    <!-- include the Tools -->
+  <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+  
+  <!-- standalone page styling (can be removed) -->
+  <link rel="shortcut icon" href="/media/img/favicon.ico">
+  <link rel="stylesheet" type="text/css"
+        href="/media/css/standalone.css"/>
+
+  <link rel="stylesheet" href="/media/css/tabs.css"
+      type="text/css" media="screen" />
+<link rel="stylesheet" href="/media/css/tabs-panes.css"
+      type="text/css" media="screen" />
+</head>
+
+<h1>Messages</h1>
+<ul class="tabs">
+	<li><a href="#">Inbox</a></li>
+	<li><a href="#">Sent</a></li>
+</ul>
+<hr>
+
+ 
+<!-- tab "panes" -->
+<div class="panes">
+    <div>
+        {{for message in inbox:}}
+        <ul>
+            <li>{{=message.subject}}
+        </ul>
+        {{pass}}
+    </div>
+	<div>
+	    {{for message in sent:}}
+        <ul>
+            <li>{{=message.subject}}
+        </ul>
+        {{pass}}
+	</div>
+</div>
+
+
+<script>
+// perform JavaScript after the document is scriptable.
+$(function() {
+    // setup ul.tabs to work as tabs for each div directly under div.panes
+    $("ul.tabs").tabs("div.panes > div");
+});
+</script>
