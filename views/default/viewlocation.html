@@ -18,10 +18,14 @@ args=[location.user.id]))}} on {{=location.date}}<br>
 <p>{{=location.note}}</p>
 <hr>
 {{if fullview:}}
+
 <script>
 showPosition()
 </script>
 GPS Coordinates: {{=location.latitude}} {{=location.longitude}}
+{{if form:}}
+{{=form}}
+{{pass}}
 {{else:}}
 {{session.location =location.id}}
 <a href="{{=URL('trade')}}"><button>Trade Location</button></a>

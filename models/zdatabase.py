@@ -44,7 +44,7 @@ db.define_table('trade',
                 )
 
 db.define_table('location_rating',
-                Field('user', 'reference auth_user'),
+                Field('user', 'reference auth_user', default = auth.user_id),
                 Field('rating', 'integer', default=1),
                 Field('location', 'reference location'),
                 Field('date', 'datetime',default=datetime.utcnow()),

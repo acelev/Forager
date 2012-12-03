@@ -8,7 +8,6 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-import helpfunctions
 
 
 @auth.requires_login()
@@ -137,19 +136,62 @@ def addlocation():
        response.flash = 'give us some info about the location'
    return dict(form=form) 
 
+
+def upvote(location, user):
+   location.rating+=1
+   location.update_record()
+   id_ = db.location_rating.insert()
+   location.user.rating+=1
+   location.update_record()
+   location.user.update_record() 
+   db.commit()
+   return id_
+
+def downvote(location,user):
+   if location.rating - 1 > 0:
+      location.rating-=1
+   else:
+      location.rating = 0
+   if location.user.rating - 1 > 0:
+      location.user.rating-=1
+   else:
+      user.rating = 0
+   id_ = db.location_rating.insert()
+   location.update_record()
+   location.user.update_record()
+   db.commit()
+
+
+
 @auth.requires_login()
 def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
+   rateForm = None
+   rating = db((db.location_rating.user == auth.user_id) &
+(db.location_rating.location == location.id)).select().first()
+   if rating ==  None:
+      rateForm = FORM(INPUT(_type = 'submit', _name ='upvote', _value ='Up vote'),
+               INPUT(_type = 'submit', _name ='downvote', _value= 'Down Vote')) 
+   
+   if request.vars['upvote']:
+      db.location_rating.location.default = location
+      upvote(location, auth.user)
+      redirect(URL('viewlocation', args=[request.args[0]]))
+   if request.vars['downvote']:
+      db.location_rating.location.default = location
+      downvote(location, auth.user)
+      redirect(URL('viewlocation', args=[request.args[0]]))
+
    if auth.user_id == location.user:
-      return dict(fullview=True,location=location) 
+      return dict(fullview=True,location=location, form=rateForm) 
    trade = db((db.trade.user_from == auth.user_id) &
             (db.trade.location_to == location)).select().first()
    if trade <> None and trade.approved:
-      return dict(fullview=True, location=location) 
+      return dict(fullview=True, location=location, form=rateForm) 
    othertrade = db((db.trade.user_to == auth.user_id) &
                (db.trade.location_from == location)).select().first()
-   if othertrade <> None  and othertrade.approved:
-      return dict(fullview=True, location=location) 
+   if othertrade <> None  and othertrade.approved: 
+      return dict(fullview=True, location=location, form=rateForm) 
  
    return dict(fullview = False, location=location, trade=trade) 
 
