@@ -168,7 +168,7 @@ def viewlocation():
    location = db.location(request.args[0]) or redirect(URL('index'))
    rateForm = None
    rating = db((db.location_rating.user == auth.user_id) &
-(db.location_rating.location == location.id)).select().first()
+   (db.location_rating.location == location.id)).select().first()
    if rating ==  None:
       rateForm = FORM(INPUT(_type = 'submit', _name ='upvote', _value ='Up vote'),
                INPUT(_type = 'submit', _name ='downvote', _value= 'Down Vote')) 
