@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+<h1> {{=user.user_name}}'s Trades </h1>
+{{for trade in approvedtrades:}}
+{{if trade.user_to.id == user.id:}}
+<h2> Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
+args=[trade.location_from.id]))}} submitted by:
+{{=A(trade.user_from.user_name, _href=URL('viewuser',args=[trade.user_from.id]))}}
+</h2>
+{{else:}}
+<h2> Location: {{=A(trade.location_to.title, _href=URL('viewlocation',
+args=[trade.location_to.id]))}} submitted by:
+{{=A(trade.user_to.user_name, _href=URL('viewuser',args=[trade.user_to.id]))}}
+</h2>
+{{pass}}
+<br>
+{{=A('view trade', _href=URL('viewtrade', args=[trade.id]))}}
+{{pass}}
+
+
+<p>{{=A('prev' ,_href=URL('viewtrades', args=[user.id, page - 1]))}}
+{{=A('next' ,_href=URL('viewtrades', args=[user.id, page + 1]))}} </p>
+
+ 

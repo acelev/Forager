@@ -1,0 +1,10 @@
+{{extend 'layout.html'}}
+<h2>Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
+args = [trade.location_from.id]))}} submited by :
+{{=A(trade.user_from.user_name, _href=URL('viewuser', args
+=[trade.user_from.id]))}} <br>
+For: {{=A(trade.location_to.title, _href=URL('viewlocation',
+args=[trade.location_to.id]))}} By: {{=A(trade.user_to.user_name,
+_href=URL('viewuser', args=[trade.user_to.id]))}}</h2>
+
+{{=form}}

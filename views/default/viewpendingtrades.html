@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+<h1> {{=user.user_name}}'s Trades </h1>
+{{for trade in pendingtrades:}}
+<h2> Location: {{=A(trade.location_from.title, _href=URL('viewlocation',
+args=[trade.location_from.id]))}} submitted by:
+{{=A(trade.user_from.user_name, _href=URL('viewuser',args=[trade.user_from.id]))}}
+</h2>
+{{=A('view trade', _href=URL('viewtrade', args=[trade.id]))}}
+{{pass}}
+
+
+<p>{{=A('prev' ,_href=URL('viewpendingtrades', args=[user.id, page - 1]))}}
+{{=A('next' ,_href=URL('viewpendingtrades', args=[user.id, page + 1]))}} </p>
+
+ 
