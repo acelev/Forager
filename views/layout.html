@@ -84,6 +84,10 @@ div.error { background-color: red; color: white; padding: 3px; }
         $("#location").val(value);
         hide();
     }   
+    function searchclick(){
+      val = $("#location").val();
+      document.location.href='search/' + val;
+    }
     </script>
 <!-- Search bar code -->
 
@@ -131,9 +135,20 @@ div.error { background-color: red; color: white; padding: 3px; }
          <label for="location">Search:</label>
         </h2>
         <input type="text" id="location" name="location" autocomplete="off" onkeyup="getData(this.value);" /><br />
+         
+        <input type="button" id="submit" value="Search" onclick= "searchclick()"/>
         <div id="ajaxresults"></div>
-           <input type="submit" id="x" value="Search"/>
+           {{#=A(XML('<input type="submit" id="x" value="Search"/>'),_href=)}}
        </li>
+      <script type="text/javascript">
+        
+        //$('submit').click(function(){
+        //value = $('#location').val()
+        // url = 'search/' + value;
+        // document.write(url); 
+         //document.location.href=url;})
+        
+        </script>
        <li>
         <h2>
          Recent Finds:

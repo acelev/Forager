@@ -5,17 +5,21 @@
 <h3>Bio:</h3><br>
 {{=auth.user.bio}}<br>
 
+<h3><a href="{{=URL('viewlocations', args=[auth.user_id, 0])}}"><button>View Locations</button></a>
+</h3>
+<a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
+
+<br>
 {{if newmessages > 0:}}
 <a href="{{=URL('messages')}}">{{=newmessages}} New Messages!</a>
 {{pass}}
 
-<h3>{{=A('view locations', _href=URL('viewlocations', args=[auth.user_id,
-0]))}}</h3>
-<a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 
 {{if pendingtrades:}}
+<br>
 <a href="{{=URL('viewpendingtrades', args =[auth.user_id,
 0])}}"><button>You've got pending trades</button></a>
+<br>
 {{pass}}
 
 <a href="{{=URL('viewtrades', args =[auth.user_id, 0])}}"><button>View Trades</button></a>

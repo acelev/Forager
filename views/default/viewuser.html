@@ -5,15 +5,10 @@
 {{=user.bio}}<br>
 
 <h4>Locations:</h4>
-<ul>
-{{for location in locations:}}
-   <li>{{=A(location.title ,_href=URL('viewlocation', args=[location.id]))}}
-      created on {{=location.date}}
-      <br>
-      mushroom type: {{=location.mushroom}}
-   </li>
-{{pass}}
+<a href="{{=URL('viewlocations', args =[user.id,
+0])}}"><button>view locations</button></a>
 
+   <a href="{{=URL('')}}"><button>Send Message</button></a>
 <ul>
     <a href="{{=URL('newmessage',args=[user.id])}}"><button>Send Message</button></a>
 </ul>
