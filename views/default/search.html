@@ -2,6 +2,6 @@
 <h1>search</h1>
 {{for result in results:}}
 <ul>
-<li>{{=result.title}}
+<li>{{=A(result.title, _href=URL('viewlocation', args = [result.id]))}}
 </ul>
 {{pass}}
