@@ -119,6 +119,7 @@ def viewtrade():
    elif request.vars['decline']:
       declined(trade)
    return dict(trade=trade, form=form)
+>>>>>>> master
 
 @auth.requires_login()
 def trade():
