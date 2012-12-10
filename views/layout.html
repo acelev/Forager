@@ -154,14 +154,15 @@ div.error { background-color: red; color: white; padding: 3px; }
          Recent Finds:
         </h2>
         <ul>
-         {{#if type(db) != str:}}
-         {{#locations=db(db.location).select(orderby=~db.location.date|db.location.rating)}}
-         {{#if locations == None:}}
-         {{#for location in locations:}}
-            <li>{{#=A(location.title, _href=URL('viewlocation',args=[location.id]))}}<br><sup><small> by: {{#=location.user.user_name}}
-on {{#=location.date.date()}}</small></sup></li>
-        {{#pass}}  
-         {{#pass}}
+         {{if type(db) != type("hello"):}}
+         {{locations=db(db.location).select(orderby=~db.location.date|db.location.rating)}}
+         {{for location in locations:}}
+            <li>{{=A(location.title,
+_href=URL('viewlocation',args=[location.id]))}}<br><sup><small> by: {{=location.user.user_name}}
+on {{=location.date.date()}}</small></sup></li>
+        {{pass}}  
+         {{pass}}
+         {{pass}}
         </ul>
        </li>
       </ul>
