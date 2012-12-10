@@ -1,0 +1,6 @@
+{{extend 'layout.html'}}
+<h1>New Message</h1>
+To: <strong>{{=recipient.user_name}}</strong><br>
+From: <strong>{{=sender.user_name}}</strong><br>
+{{=form}}
+<a href="{{=URL('messages')}}"><button>Back</button></a>

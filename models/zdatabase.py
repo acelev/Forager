@@ -56,6 +56,7 @@ db.define_table('message',
                 Field('subject', 'string', default=""),
                 Field('date', 'datetime', default=datetime.utcnow()),
                 Field('note', 'text'),
+                Field('read', 'boolean', default=False, readable = False),
                 )
 
 db.define_table('comment',

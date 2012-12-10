@@ -1,0 +1,57 @@
+{{extend 'layout.html'}}
+<head>
+    <!-- include the Tools -->
+  <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+  
+  <!-- standalone page styling (can be removed) -->
+  <link rel="shortcut icon" href="/media/img/favicon.ico">
+  <link rel="stylesheet" type="text/css"
+        href="/media/css/standalone.css"/>
+
+  <link rel="stylesheet" href="/media/css/tabs.css"
+      type="text/css" media="screen" />
+<link rel="stylesheet" href="/media/css/tabs-panes.css"
+      type="text/css" media="screen" />
+</head>
+
+<h1>Messages</h1>
+<ul class="tabs">
+	<li><a href="#">Inbox</a></li>
+	<li><a href="#">Sent</a></li>
+</ul>
+<hr>
+
+ 
+<!-- tab "panes" -->
+<div class="panes">
+    <div>
+        {{for message in inbox:}}
+        <ul>
+            
+              <img height='40' width='40' src="{{=URL('download',args=message.user_from.image)}}"/>
+              {{if message.read  == False:}}
+              <b>New</b>
+              {{pass}}
+               <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> From: <a href="{{=URL('viewuser', args=message.user_from)}}">{{=message.user_from.user_name}}</a> on: {{=message.date}}</sub>
+        </ul>
+        {{pass}}
+    </div>
+	<div>
+	    {{for message in sent:}}
+        <ul>
+            
+              <img height='40' width='40' src="{{=URL('download',args=message.user_to.image)}}"/>
+               <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> To: <a href="{{=URL('viewuser', args=message.user_to)}}">{{=message.user_to.user_name}}</a> on: {{=message.date}}</sub>
+        </ul>
+        {{pass}}
+	</div>
+</div>
+
+
+<script>
+// perform JavaScript after the document is scriptable.
+$(function() {
+    // setup ul.tabs to work as tabs for each div directly under div.panes
+    $("ul.tabs").tabs("div.panes > div");
+});
+</script>
