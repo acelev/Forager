@@ -1,6 +1,6 @@
 {{extend 'layout.html'}}
 Subject: <strong>{{=message.subject}}</strong><br>
-From: <img height='40' width='40' src="{{=URL('download',args=sender.image)}}"/> <strong>{{=sender.user_name}}</strong><br>
+From: <a href="{{=URL('viewuser', args=message.user_from)}}"><img height='40' width='40' src="{{=URL('download',args=sender.image)}}"/> <strong>{{=sender.user_name}}</strong></a><br>
 <hr>
 Message: <p>{{=message.note}}</p>
 <hr>
