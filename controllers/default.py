@@ -20,7 +20,8 @@ def index():
       & (db.trade.approved == False)).select(orderby=~db.trade.date)
     approvedtrades = db((db.trade.user_to == auth.user_id) | (db.trade.user_from == auth.user_id) 
       &(db.trade.approved == True)).select(orderby=~db.trade.date)
-    newmessages = db((db.message.user_to==auth.user)&(db.message.read==False)).count()
+    #newmessages = db(db.message).count()
+    newmessages = db((db.message.user_to==auth.user_id)&(db.message.read==False)).count()
     return dict(user=user, newmessages=newmessages,
             locations=locations,pendingtrades=pendingtrades, approvedtrades=approvedtrades)
 
@@ -119,7 +120,6 @@ def viewtrade():
    elif request.vars['decline']:
       declined(trade)
    return dict(trade=trade, form=form)
->>>>>>> master
 
 @auth.requires_login()
 def trade():
@@ -229,7 +229,7 @@ def ajaxlivesearch():
 @auth.requires_login()
 def messages():
   inbox = db(db.message.user_to == auth.user_id).select(orderby=~db.message.date)
-  sent = db(db.message.user_from == auth.user).select(orderby=~db.message.date)
+  sent = db(db.message.user_from == auth.user_id).select(orderby=~db.message.date)
   return dict(inbox=inbox, sent=sent)
 
 @auth.requires_login()

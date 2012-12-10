@@ -14,9 +14,6 @@
 <a href="{{=URL('messages')}}">{{=newmessages}} New Messages!</a>
 {{pass}}
 
-<h3>{{=A('view locations', _href=URL('viewlocations', args=[auth.user_id,
-0]))}}</h3>
-<a href="{{=URL('addlocation')}}"><button>Add Location</button></a>
 
 {{if pendingtrades:}}
 <br>
