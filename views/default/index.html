@@ -11,7 +11,7 @@
 
 <br>
 {{if newmessages > 0:}}
-<a href="{{=URL('messages')}}">{{=newmessages}} New Messages!</a>
+<a href="{{=URL('messages', args = ['0','0'])}}">{{=newmessages}} New Messages!</a>
 {{pass}}
 
 

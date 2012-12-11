@@ -47,9 +47,11 @@ def viewuser():
 def search():
   syntax = re.compile('^.*$')
   order = db.location.date
-  search_terms = request.args
   results = []
-  if search_terms == '':
+  if not request.args:
+    redirect( URL('search', args = ['all']))
+  search_terms = request.args[0]
+  if search_terms == 'all':
     results = db().select(db.location.ALL)
     return dict(results=results)
   for terms in search_terms:
@@ -227,9 +229,18 @@ def ajaxlivesearch():
     return TAG[''](*items) 
 @auth.requires_login()
 def messages():
-  inbox = db(db.message.user_to == auth.user_id).select(orderby=~db.message.date)
-  sent = db(db.message.user_from == auth.user_id).select(orderby=~db.message.date)
-  return dict(inbox=inbox, sent=sent)
+  orderby=~db.message.date
+  ipage = int(request.args[0]) or 0
+  spage = int(request.args[1]) or 0
+  iquery = (db.message.user_to == auth.user_id)
+  squery = (db.message.user_from == auth.user_id)
+  if ipage < 0:
+    ipage = 0
+  if spage < 0:
+    spage = 0
+  inbox = pagination(iquery, 1, ipage, orderby)
+  sent = pagination(squery, 1, spage,orderby)
+  return dict(inbox=inbox, ipage=ipage, spage=spage, sent=sent)
 
 @auth.requires_login()
 def viewmessage():

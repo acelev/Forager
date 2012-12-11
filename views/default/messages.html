@@ -35,6 +35,7 @@
                <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> From: <a href="{{=URL('viewuser', args=message.user_from)}}">{{=message.user_from.user_name}}</a> on: {{=message.date}}</sub>
         </ul>
         {{pass}}
+        <p>{{=A('prev' ,_href=URL('mesages', args=[ipage-1, spage]))}} {{=A('next' ,_href=URL('viewlocations', args=[ipage+1, spage]))}} </p>
     </div>
 	<div>
 	    {{for message in sent:}}
@@ -44,6 +45,7 @@
                <a href="{{=URL('viewmessage', args=message.id)}}">{{=message.subject}}</a><sub> To: <a href="{{=URL('viewuser', args=message.user_to)}}">{{=message.user_to.user_name}}</a> on: {{=message.date}}</sub>
         </ul>
         {{pass}}
+        <p>{{=A('prev' ,_href=URL('messages', args=[ipage, spage-1]))}} {{=A('next' ,_href=URL('messages', args=[ipage, spage + 1]))}} </p>
 	</div>
 </div>
 
