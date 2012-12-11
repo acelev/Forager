@@ -62,8 +62,8 @@ def search():
       term = term.split('_')
       for word in term:
         word = '%'+word+'%'
-        
-        results = pagination(db.location.title.lower().like(word), 9, page, ~order)
+        query = (db.location.title.lower().like(word))|(db.location.mushroom.like(word)) 
+        results = pagination(query, 9, page, ~order)
   return dict(results=results, search_terms=search_terms, page=page)
 
 def pagination(query,itemsPerPage, page, orderby):
@@ -225,13 +225,19 @@ def viewlocation():
 def ajaxlivesearch():
     partialstr = request.vars.values()[0]
     query = db.location.title.like('%'+partialstr+'%')
+    shroomquery = db.location.mushroom.like('%'+partialstr+'%')
+    shroomlocations = db(shroomquery).select(db.location.mushroom)
     locations = db(query).select(db.location.title)
     items = []
     for (i,location) in enumerate(locations):
         items.append(DIV(A(location.title, _id="res%s"%i, 
           _href="#", _onclick="copyToBox($('#res%s').html())"%i), 
           _id="resultLiveSearch"))
-
+        
+    for(i, location) in enumerate(shroomlocations):
+        items.append(DIV(A(location.mushroom, _id="res%s"%i, 
+          _href="#", _onclick="copyToBox($('#res%s').html())"%i), 
+          _id="resultLiveSearch"))
     return TAG[''](*items) 
 
 @auth.requires_login()
