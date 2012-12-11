@@ -48,12 +48,13 @@ def search():
   syntax = re.compile('^.*$')
   order = db.location.date
   results = []
+  page = int(request.args[0])
   if not request.args:
-    redirect( URL('search', args = ['all']))
-  search_terms = request.args[0]
+    redirect( URL('search', args = [0,'all']))
+  search_terms = request.args[1]
   if search_terms == 'all':
-    results = db().select(db.location.ALL)
-    return dict(results=results)
+    results = pagination(db.location,9, page, order) 
+    return dict(results=results, search_terms=search_terms, page=page)
   for terms in search_terms:
     terms = terms.lower()
     terms = syntax.findall(terms)
@@ -61,8 +62,9 @@ def search():
       term = term.split('_')
       for word in term:
         word = '%'+word+'%'
-        results += db(db.location.title.lower().like(word)).select(orderby=~order)
-  return dict(results=results)
+        
+        results = pagination(db.location.title.lower().like(word), 9, page, ~order)
+  return dict(results=results, search_terms=search_terms, page=page)
 
 def pagination(query,itemsPerPage, page, orderby):
    limitby = (page*itemsPerPage,(page+1)*itemsPerPage+1)
@@ -77,8 +79,7 @@ def viewlocations():
    orderby = ~db.location.date   
    if page < 0:
       page = 0 
-   return dict(user=user,page=page, locations = pagination(query, 4,
-page, orderby))
+   return dict(user=user,page=page, locations = pagination(query, 4,page, orderby))
 
 @auth.requires_login()
 def viewpendingtrades():

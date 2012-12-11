@@ -86,7 +86,9 @@ div.error { background-color: red; color: white; padding: 3px; }
     }   
     function searchclick(){
       val = $("#location").val();
-      document.location.href='search/' + val;
+      if (!val) val = 'all';
+      window.location.pathname =  'Forager/default/search/0/' + val;
+      return false;
     }
     </script>
 <!-- Search bar code -->
@@ -140,15 +142,8 @@ div.error { background-color: red; color: white; padding: 3px; }
         <div id="ajaxresults"></div>
            {{#=A(XML('<input type="submit" id="x" value="Search"/>'),_href=)}}
        </li>
-      <script type="text/javascript">
         
-        //$('submit').click(function(){
-        //value = $('#location').val()
-        // url = 'search/' + value;
-        // document.write(url); 
-         //document.location.href=url;})
-        
-        </script>
+       
        <li>
         <h2>
          Recent Finds:

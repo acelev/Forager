@@ -5,3 +5,8 @@
 <li>{{=A(result.title, _href=URL('viewlocation', args = [result.id]))}}
 </ul>
 {{pass}}
+
+<p>{{=A('prev' ,_href=URL('search', args=[page -1, search_terms]))}}
+{{=A('next' ,_href=URL('search', args=[page + 1, search_terms]))}} </p>
+
+
