@@ -74,7 +74,9 @@ def viewlocations():
    user = db.auth_user[request.args[0]] or redirect(URL('index'))
    page = int(request.args[1]) or 0
    query = (db.location.user == user)
-   orderby = ~db.location.date
+   orderby = ~db.location.date   
+   if page < 0:
+      page = 0 
    return dict(user=user,page=page, locations = pagination(query, 4,
 page, orderby))
 
@@ -84,6 +86,8 @@ def viewpendingtrades():
    page = int(request.args[1]) or 0
    query = (db.trade.user_to == auth.user_id) & (db.trade.approved == False)
    orderby = ~db.trade.date
+   if page < 0:
+      page = 0 
    return dict(user=user,page=page, pendingtrades = pagination(query, 4,
 page,orderby))
 
@@ -91,11 +95,12 @@ page,orderby))
 @auth.requires_login()
 def viewtrades():
    user = db.auth_user[request.args[0]] or redirect(URL('index'))
-   page = int(request.args[1]) or 0
+   page = int(request.args[1])
    query = (db.trade.user_to == auth.user_id) | (db.trade.user_from == auth.user_id) & (db.trade.approved == True)
    orderby = ~db.trade.date
-   return dict(user=user,page=page, approvedtrades = pagination(query, 4,
-page,orderby))
+   if page < 0:
+      page = 0 
+   return dict(user=user,page=page, approvedtrades = pagination(query, 4,page,orderby))
 
 def accept(trade):
    trade.approved = True
@@ -227,19 +232,20 @@ def ajaxlivesearch():
           _id="resultLiveSearch"))
 
     return TAG[''](*items) 
+
 @auth.requires_login()
 def messages():
   orderby=~db.message.date
-  ipage = int(request.args[0]) or 0
-  spage = int(request.args[1]) or 0
+  ipage = int(request.args[0])
+  spage = int(request.args[1])
   iquery = (db.message.user_to == auth.user_id)
   squery = (db.message.user_from == auth.user_id)
   if ipage < 0:
-    ipage = 0
+      ipage = 0
   if spage < 0:
-    spage = 0
-  inbox = pagination(iquery, 1, ipage, orderby)
-  sent = pagination(squery, 1, spage,orderby)
+      spage = 0
+  inbox = pagination(iquery, 9, ipage, orderby)
+  sent = pagination(squery, 9, spage,orderby)
   return dict(inbox=inbox, ipage=ipage, spage=spage, sent=sent)
 
 @auth.requires_login()
@@ -250,7 +256,7 @@ def viewmessage():
   db.commit()
   sender = message.user_from
   if message == None:
-    redirect(URL('messages'))
+    redirect(URL('messages', args=[0,0]))
   return dict(message=message, sender=sender)
 
 @auth.requires_login()
@@ -283,7 +289,7 @@ def newmessage():
   form = SQLFORM(db.message)
   if form.process().accepted:
     response.flash = 'message sent'
-    redirect(URL('messages'))
+    redirect(URL('messages', args=[0,0]))
   elif form.errors:
     response.flash = 'message has errors'
   else:
