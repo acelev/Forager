@@ -6,7 +6,7 @@ Message: <p>{{=message.note}}</p>
 <hr>
 Sent on: {{=message.date}}
 <br>
-<a href="{{=URL('messages')}}"><button>Back</button></a>
+<a href="{{=URL('messages', args =[0,0])}}"><button>Back</button></a>
 <a href="{{=URL('newmessage', args =['reply', message.id])}}"><button>Reply</button></a>
 
 <a href="{{=URL('index')}}"><button>Delete</button></a>

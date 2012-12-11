@@ -238,6 +238,7 @@ def ajaxlivesearch():
         items.append(DIV(A(location.mushroom, _id="res%s"%i, 
           _href="#", _onclick="copyToBox($('#res%s').html())"%i), 
           _id="resultLiveSearch"))
+
     return TAG[''](*items) 
 
 @auth.requires_login()
@@ -258,7 +259,8 @@ def messages():
 @auth.requires_login()
 def viewmessage():
   message = db.message[request.args[0]]
-  message.read = True
+  if message.user_to == auth.user_id:
+     message.read = True
   message.update_record()
   db.commit()
   sender = message.user_from

@@ -12,8 +12,10 @@
 <br>
 {{if newmessages > 0:}}
 <a href="{{=URL('messages', args = ['0','0'])}}">{{=newmessages}} New Messages!</a>
+{{else:}}
+<a href="{{=URL('messages', args = ['0','0'])}}"><button> View
+Messages!</button></a>
 {{pass}}
-
 
 {{if pendingtrades:}}
 <br>
