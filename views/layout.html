@@ -151,11 +151,14 @@ div.error { background-color: red; color: white; padding: 3px; }
         <ul>
          {{if type(db) != type("hello"):}}
          {{locations=db(db.location).select(orderby=~db.location.date|db.location.rating)}}
-         {{for location in locations:}}
+         {{for (i,location) in enumerate(locations):}}
+         {{if i >= 10:}}
+            {{break}}
             <li>{{=A(location.title,
 _href=URL('viewlocation',args=[location.id]))}}<br><sup><small> by: {{=location.user.user_name}}
 on {{=location.date.date()}}</small></sup></li>
         {{pass}}  
+         {{pass}}
          {{pass}}
          {{pass}}
         </ul>

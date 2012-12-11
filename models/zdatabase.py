@@ -17,7 +17,6 @@ db.define_table('location',
                 Field('note', 'text', default = "Enter note here"),
                 Field('rating', 'integer', default=1,
                                            writable = False),
-                #Field('photo', 'reference photo'),
                 Field('photo', 'upload', uploadfield='picture_file'),
                 Field('picture_file', 'blob'),
                 )
