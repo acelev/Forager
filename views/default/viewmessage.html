@@ -9,4 +9,4 @@ Sent on: {{=message.date}}
 <a href="{{=URL('messages', args =[0,0])}}"><button>Back</button></a>
 <a href="{{=URL('newmessage', args =['reply', message.id])}}"><button>Reply</button></a>
 
-<a href="{{=URL('index')}}"><button>Delete</button></a>
+{{=delete}}

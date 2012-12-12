@@ -4,7 +4,7 @@
 <h4><i>{{=location.mushroom}}</i></h4>
 <hr>submitted by {{=A(location.user.user_name, _href = URL('viewuser',
 args=[location.user.id]))}} on {{=location.date}}<br>
-<img src="{{=URL('download',args=location.photo)}}" />
+<img height = '200' widht='200' src="{{=URL('download',args=location.photo)}}" />
 <p>{{=location.note}}</p>
 <hr>
 {{if fullview:}}

@@ -69,7 +69,25 @@ def search():
 def pagination(query,itemsPerPage, page, orderby):
    limitby = (page*itemsPerPage,(page+1)*itemsPerPage+1)
    return db(query).select(orderby=orderby, limitby=limitby) 
-   
+
+@auth.requires_login() 
+def editprofile():
+   user = db.auth_user[auth.user_id] 
+   form = SQLFORM.factory(Field('bio', 'text', default = user.bio),
+                          Field('image', 'upload', uploadfield='picture_file',  default = user.image),
+                          Field('picture_file', 'blob', default =
+user.picture_file),
+                           Field('password', 'password', length=512,
+readable=False, label='Password', default = user.password))
+   if form.process().accepted:
+      user.bio = form.vars.bio
+      user.password = form.vars.password
+      user.picture_file = form.vars.picture_file
+      user.image = form.vars.image
+      user.update_record()
+      db.commit()
+      redirect(URL('index'))
+   return dict(form=form)  
 
 @auth.requires_login()
 def viewlocations():
@@ -246,8 +264,8 @@ def messages():
   orderby=~db.message.date
   ipage = int(request.args[0])
   spage = int(request.args[1])
-  iquery = (db.message.user_to == auth.user_id)
-  squery = (db.message.user_from == auth.user_id)
+  iquery = (db.message.user_to == auth.user_id)&(db.message.user_to_removed == False)
+  squery = (db.message.user_from == auth.user_id)&(db.message.user_from_removed == False)
   if ipage < 0:
       ipage = 0
   if spage < 0:
@@ -261,12 +279,22 @@ def viewmessage():
   message = db.message[request.args[0]]
   if message.user_to == auth.user_id:
      message.read = True
+  rateForm = FORM(INPUT(_type = 'submit', _name ='remove',_value='Remove'))
+  if request.vars['remove']:
+     if message.user_to == auth.user_id:
+        message.user_to_removed = True
+     else:
+        message.user_from_removed = True
+     message.update_record()
+     db.commit() 
+     redirect(URL('messages', args=[0,0]))
+
   message.update_record()
   db.commit()
   sender = message.user_from
   if message == None:
     redirect(URL('messages', args=[0,0]))
-  return dict(message=message, sender=sender)
+  return dict(message=message, sender=sender, delete=rateForm)
 
 @auth.requires_login()
 def newmessage():

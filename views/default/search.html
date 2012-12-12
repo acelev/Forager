@@ -2,7 +2,9 @@
 <h1>search</h1>
 {{for result in results:}}
 <ul>
-<li>{{=A(result.title, _href=URL('viewlocation', args = [result.id]))}}
+
+ <img height='40' width='40' src="{{=URL('download',args=result.photo)}}"/>
+ {{=A(result.title, _href=URL('viewlocation', args = [result.id]))}}
 </ul>
 {{pass}}
 

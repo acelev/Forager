@@ -56,6 +56,10 @@ db.define_table('message',
                 Field('date', 'datetime', default=datetime.utcnow()),
                 Field('note', 'text'),
                 Field('read', 'boolean', default=False, readable = False),
+                Field('user_to_removed', 'boolean', default = False,
+readable = False, writable = False),
+                Field('user_from_removed', 'boolean', default = False,
+readable = False, writable = False),
                 )
 
 db.define_table('comment',

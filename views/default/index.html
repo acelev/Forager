@@ -12,9 +12,6 @@
 <br>
 {{if newmessages > 0:}}
 <a href="{{=URL('messages', args = ['0','0'])}}">{{=newmessages}} New Messages!</a>
-{{else:}}
-<a href="{{=URL('messages', args = ['0','0'])}}"><button> View
-Messages!</button></a>
 {{pass}}
 
 {{if pendingtrades:}}
@@ -24,6 +21,7 @@ Messages!</button></a>
 <br>
 {{pass}}
 
+
+<a href="{{=URL('editprofile')}}"><button>Edit Profile</button></a>
 <a href="{{=URL('viewtrades', args =[auth.user_id, 0])}}"><button>View Trades</button></a>
 
- <iframe src="http://www.animeuploads.com/embed.php?file=Scooby-Doo Where Are You/23 A Tiki Scare Is No Fair [cedar].flv" width="530" height="410" frameborder="0" scrolling="no"></iframe>
