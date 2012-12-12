@@ -22,11 +22,19 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
-    (T('Home'), False, URL('default','index'), []),
-    (T('Search'), False, URL('default','index'), []),
-    (T('Profile'), False, URL('default','index'), []),
-    (T('Forum'), False, URL('default','index'), []),
+    (T('login'), False, URL('default','index'), []),
+    (T('Browse'), False, URL('default','search', args=['0','all']), []),
     (T('About'), False, URL('default','index'), []),
+    ]
+if auth.user:
+	response.menu = [
+    (T(auth.user.user_name), False, URL('default','index'), []),
+    (T('Messages'), False, URL('default','messages', args=['0','0']), []),
+    (T('Trades'), False, URL('default','viewtrades', args=[auth.user.id, '0']), []),
+    (T('Locations'), False, URL('default','viewlocations',args=[auth.user.id, '0']), []),
+    (T('Browse'), False, URL('default','search', args=['0','all']), []),
+    (T('About'), False, URL('default','index'), []),
+    (T('Logout'), False, URL('user/logout'), []),
     ]
 
 
